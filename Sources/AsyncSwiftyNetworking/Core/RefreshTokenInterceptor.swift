@@ -140,11 +140,10 @@ private actor RefreshCoordinator {
         // Start a new refresh
         isRefreshing = true
         
-        let task = Task {
-            defer {
-                Task { await self.completeRefresh() }
-            }
-            return try await refresh()
+        let task = Task { [weak self] in
+            let result = try await refresh()
+            await self?.completeRefresh()
+            return result
         }
         
         refreshTask = task
