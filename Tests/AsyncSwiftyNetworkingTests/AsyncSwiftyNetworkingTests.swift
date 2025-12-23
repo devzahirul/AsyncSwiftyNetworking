@@ -1,6 +1,9 @@
-import Testing
+import XCTest
 @testable import AsyncSwiftyNetworking
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+final class AsyncSwiftyNetworkingTests: XCTestCase {
+    func testExample() async throws {
+        // Placeholder test - actual tests are in other test files
+        XCTAssertTrue(true)
+    }
 }

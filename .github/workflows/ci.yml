@@ -13,11 +13,11 @@ concurrency:
 jobs:
   test-macos:
     name: Test (macOS - Xcode ${{ matrix.xcode }})
-    runs-on: macos-14
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
-        xcode: ['15.2', '15.4']
+        xcode: ['16.1']
 
     steps:
       - name: Checkout
@@ -46,7 +46,7 @@ jobs:
 
   lint:
     name: SwiftLint
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
