@@ -365,12 +365,50 @@ class MyRefreshHandler: TokenRefreshHandler {
 ### Custom Interceptor
 
 ```swift
-class LoggingInterceptor: RequestInterceptor {
+// 1. Create custom interceptor
+class ApiKeyInterceptor: RequestInterceptor {
+    private let apiKey: String
+    
+    init(apiKey: String) {
+        self.apiKey = apiKey
+    }
+    
     func intercept(_ request: URLRequest) async throws -> URLRequest {
-        print("➡️ \(request.httpMethod ?? "") \(request.url?.path ?? "")")
-        return request
+        var req = request
+        req.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+        return req
     }
 }
+```
+
+### Adding Custom Interceptors to Client
+
+```swift
+DI.configure { di in
+    let storage = KeychainTokenStorage()
+    
+    // Create interceptors
+    let authInterceptor = AuthInterceptor(storage: storage)
+    let apiKeyInterceptor = ApiKeyInterceptor(apiKey: "your-api-key")
+    let loggingInterceptor = LoggingInterceptor(level: .verbose)
+    
+    // Register client with custom interceptors
+    di.register(URLSessionNetworkClient.self) {
+        URLSessionNetworkClient(
+            configuration: .default,
+            requestInterceptors: [authInterceptor, apiKeyInterceptor, loggingInterceptor],
+            responseInterceptors: [loggingInterceptor]
+        )
+    }
+}
+```
+
+### Interceptor Order
+
+Interceptors execute in order:
+```
+Request: authInterceptor → apiKeyInterceptor → loggingInterceptor → Network
+Response: Network → loggingInterceptor → App
 ```
 
 ## 🛠️ Request Builder
