@@ -343,6 +343,7 @@ class AuthServiceImpl: AuthService {
 @MainActor
 class LoginVM: ObservableObject, DefaultInitializable {
     @Inject var authService: AuthService
+    @Inject var tokenStorage: TokenStorage  // Injected!
     
     @Published var email = ""
     @Published var password = ""
@@ -363,7 +364,7 @@ class LoginVM: ObservableObject, DefaultInitializable {
         
         do {
             let response = try await authService.login(email: email, password: password)
-            DI.shared.tokenStorage?.save(response.token)
+            tokenStorage.save(response.token)  // Uses injected dependency!
             isLoggedIn = true
         } catch let networkError as NetworkError {
             error = networkError.userMessage
