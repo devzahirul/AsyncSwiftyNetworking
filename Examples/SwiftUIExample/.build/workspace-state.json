@@ -1,0 +1,27 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "asyncswiftynetworking",
+          "kind" : "fileSystem",
+          "location" : "/Users/lynkto_1/AsyncSwiftyNetworking",
+          "name" : "AsyncSwiftyNetworking"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/lynkto_1/AsyncSwiftyNetworking"
+        },
+        "subpath" : "asyncswiftynetworking"
+      }
+    ],
+    "prebuilts" : [
+
+    ]
+  },
+  "version" : 7
+}

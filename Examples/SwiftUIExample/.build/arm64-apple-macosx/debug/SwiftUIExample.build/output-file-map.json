@@ -1,0 +1,82 @@
+{
+  "": {
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/master.swiftdeps"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Managers/AuthManager.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/AuthManager.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/AuthManager.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/AuthManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/AuthManager.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/AuthManager.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Networking/APIEndpoints.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/APIEndpoints.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/APIEndpoints.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/APIEndpoints~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/APIEndpoints.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/APIEndpoints.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Networking/DemoMockURLSession.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/DemoMockURLSession.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/DemoMockURLSession.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/DemoMockURLSession~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/DemoMockURLSession.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/DemoMockURLSession.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Networking/Models.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/Models.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/Models.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/Models~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/Models.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/Models.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Networking/NetworkManager.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/NetworkManager.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/NetworkManager.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/NetworkManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/NetworkManager.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/NetworkManager.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/SwiftUIExampleApp.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/SwiftUIExampleApp.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/SwiftUIExampleApp.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/SwiftUIExampleApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/SwiftUIExampleApp.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/SwiftUIExampleApp.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Views/CreatePostView.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/CreatePostView.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/CreatePostView.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/CreatePostView~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/CreatePostView.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/CreatePostView.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Views/ImageUploadView.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ImageUploadView.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ImageUploadView.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ImageUploadView~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ImageUploadView.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ImageUploadView.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Views/LoginView.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/LoginView.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/LoginView.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/LoginView~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/LoginView.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/LoginView.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Views/PostsView.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/PostsView.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/PostsView.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/PostsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/PostsView.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/PostsView.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/SwiftUIExample/Views/ProfileView.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ProfileView.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ProfileView.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ProfileView~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ProfileView.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/SwiftUIExample.build/ProfileView.dia"
+  }
+}

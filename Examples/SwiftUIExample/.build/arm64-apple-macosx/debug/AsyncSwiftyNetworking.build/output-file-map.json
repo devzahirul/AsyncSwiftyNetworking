@@ -1,0 +1,152 @@
+{
+  "": {
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/master.swiftdeps"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/AsyncSwiftyNetworking.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AsyncSwiftyNetworking.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AsyncSwiftyNetworking.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AsyncSwiftyNetworking~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AsyncSwiftyNetworking.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AsyncSwiftyNetworking.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Auth/AuthEndpoint.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthEndpoint.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthEndpoint.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthEndpoint~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthEndpoint.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthEndpoint.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Auth/AuthModels.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthModels.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthModels.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthModels.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthModels.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Auth/AuthService.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthService.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthService.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthService~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthService.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthService.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/AuthInterceptor.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthInterceptor.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthInterceptor.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthInterceptor~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthInterceptor.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/AuthInterceptor.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/KeychainTokenStorage.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KeychainTokenStorage.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KeychainTokenStorage.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KeychainTokenStorage~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KeychainTokenStorage.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KeychainTokenStorage.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/LoggingInterceptor.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/LoggingInterceptor.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/LoggingInterceptor.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/LoggingInterceptor~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/LoggingInterceptor.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/LoggingInterceptor.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/MultipartFormData.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/MultipartFormData.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/MultipartFormData.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/MultipartFormData~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/MultipartFormData.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/MultipartFormData.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/NetworkConfiguration.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkConfiguration.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkConfiguration.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkConfiguration~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkConfiguration.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkConfiguration.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/PaginatedResponse.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/PaginatedResponse.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/PaginatedResponse.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/PaginatedResponse~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/PaginatedResponse.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/PaginatedResponse.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/RefreshTokenInterceptor.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RefreshTokenInterceptor.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RefreshTokenInterceptor.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RefreshTokenInterceptor~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RefreshTokenInterceptor.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RefreshTokenInterceptor.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/RequestInterceptor.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RequestInterceptor.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RequestInterceptor.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RequestInterceptor~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RequestInterceptor.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/RequestInterceptor.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/TokenStorage.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/TokenStorage.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/TokenStorage.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/TokenStorage~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/TokenStorage.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/TokenStorage.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/URLSessionProtocol.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/URLSessionProtocol.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/URLSessionProtocol.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/URLSessionProtocol~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/URLSessionProtocol.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/URLSessionProtocol.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/UserDefaultsTokenStorage.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserDefaultsTokenStorage.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserDefaultsTokenStorage.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserDefaultsTokenStorage~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserDefaultsTokenStorage.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserDefaultsTokenStorage.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Core/UserProfileStorage.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserProfileStorage.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserProfileStorage.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserProfileStorage~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserProfileStorage.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/UserProfileStorage.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/Endpoint.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/Endpoint.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/Endpoint.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/Endpoint~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/Endpoint.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/Endpoint.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/HTTPResponseDecodable.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/HTTPResponseDecodable.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/HTTPResponseDecodable.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/HTTPResponseDecodable~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/HTTPResponseDecodable.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/HTTPResponseDecodable.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/KarrotNetworkingFacade.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KarrotNetworkingFacade.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KarrotNetworkingFacade.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KarrotNetworkingFacade~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KarrotNetworkingFacade.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/KarrotNetworkingFacade.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/NetworkClient.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkClient.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkClient.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkClient.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkClient.dia"
+  },
+  "/Users/lynkto_1/AsyncSwiftyNetworking/Sources/AsyncSwiftyNetworking/NetworkError.swift": {
+    "dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkError.d",
+    "object": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkError.swift.o",
+    "swiftmodule": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkError~partial.swiftmodule",
+    "swift-dependencies": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkError.swiftdeps",
+    "diagnostics": "/Users/lynkto_1/AsyncSwiftyNetworking/Examples/SwiftUIExample/.build/arm64-apple-macosx/debug/AsyncSwiftyNetworking.build/NetworkError.dia"
+  }
+}
