@@ -1,3 +1,4 @@
+#if canImport(Security)
 import Foundation
 import Security
 
@@ -6,6 +7,7 @@ import Security
 /// A secure implementation of `TokenStorage` using the iOS Keychain.
 /// Thread-safe implementation using a serial queue for synchronization.
 /// Recommended for production use with sensitive tokens.
+/// - Note: Only available on Apple platforms (iOS, macOS, tvOS, watchOS, visionOS).
 public final class KeychainTokenStorage: TokenStorage, @unchecked Sendable {
     
     private let service: String
@@ -108,3 +110,4 @@ public final class KeychainTokenStorage: TokenStorage, @unchecked Sendable {
         return status == errSecSuccess || status == errSecItemNotFound
     }
 }
+#endif

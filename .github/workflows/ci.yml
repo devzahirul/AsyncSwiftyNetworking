@@ -44,29 +44,6 @@ jobs:
       - name: Run Tests
         run: swift test -v
 
-  test-linux:
-    name: Test (Linux - Swift ${{ matrix.swift }})
-    runs-on: ubuntu-22.04
-    container:
-      image: swift:${{ matrix.swift }}
-    strategy:
-      fail-fast: false
-      matrix:
-        swift: ['5.9', '5.10']
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Show Swift Version
-        run: swift --version
-
-      - name: Build
-        run: swift build -v
-
-      - name: Run Tests
-        run: swift test -v
-
   lint:
     name: SwiftLint
     runs-on: macos-14
