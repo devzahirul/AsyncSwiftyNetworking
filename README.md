@@ -52,15 +52,18 @@ struct MyApp: App {
         DI.configure { di in
             di.baseURL = "https://api.example.com"
             
-            // Register client
+            // 1. Register NetworkClient
             di.register(URLSessionNetworkClient.self) {
                 URLSessionNetworkClient.quick(baseURL: di.baseURL)
             }
             
-            // Register services
+            // 2. Register Service (ViewModel auto-resolves it!)
             di.register(GenericNetworkService<Profile>.self) {
                 GenericNetworkService(.get("/profile"))
             }
+            
+            // ⚠️ NO need to register ViewModel!
+            // @HiltViewModel handles ViewModel creation automatically
         }
     }
 }
