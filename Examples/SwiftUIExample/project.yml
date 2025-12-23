@@ -1,0 +1,32 @@
+name: SwiftUIExample
+options:
+  bundleIdPrefix: com.asyncswiftynetworking
+  minimumXcodeGenVersion: 2.38.0
+  deploymentTarget:
+    iOS: "16.0"
+
+packages:
+  AsyncSwiftyNetworking:
+    path: ../..
+
+targets:
+  SwiftUIExample:
+    type: application
+    platform: iOS
+    sources:
+      - SwiftUIExample
+    dependencies:
+      - package: AsyncSwiftyNetworking
+        product: AsyncSwiftyNetworking
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.asyncswiftynetworking.example
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "SwiftUI Example"
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+        SWIFT_VERSION: "5.9"
+
+

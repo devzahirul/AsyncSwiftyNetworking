@@ -3,7 +3,7 @@ import SwiftUI
 /// Generic Network ViewModel that works with any HTTPResponseDecodable type
 /// Automatically fetches data from GenericNetworkService<T>
 @MainActor
-public final class GenericNetworkViewModel<T: HTTPResponseDecodable>: ObservableObject {
+public final class GenericNetworkViewModel<T: HTTPResponseDecodable>: ObservableObject, DefaultInitializable {
     
     @Published public var data: T?
     @Published public var isLoading = false
@@ -11,7 +11,7 @@ public final class GenericNetworkViewModel<T: HTTPResponseDecodable>: Observable
     
     private var service: GenericNetworkService<T>?
     
-    public init() {}
+    public required init() {}
     
     /// Initialize with a pre-configured service
     public init(service: GenericNetworkService<T>) {
@@ -56,7 +56,7 @@ public final class GenericNetworkViewModel<T: HTTPResponseDecodable>: Observable
 
 /// Generic Network ViewModel for lists
 @MainActor
-public final class GenericListViewModel<T: Decodable>: ObservableObject {
+public final class GenericListViewModel<T: Decodable>: ObservableObject, DefaultInitializable {
     
     @Published public var items: [T] = []
     @Published public var isLoading = false
@@ -64,7 +64,7 @@ public final class GenericListViewModel<T: Decodable>: ObservableObject {
     
     private var service: GenericListService<T>?
     
-    public init() {}
+    public required init() {}
     
     public init(service: GenericListService<T>) {
         self.service = service
