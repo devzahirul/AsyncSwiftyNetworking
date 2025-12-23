@@ -194,30 +194,41 @@ typealias LoginService = GenericMutationService<LoginRequest, LoginResponse>
 di.register(LoginService.self) { LoginService(.post, "/auth/login") }
 ```
 
-### LoginViewModel.swift (Subclass for custom behavior)
+### LoginViewModel.swift (Using AuthState)
 
 ```swift
 @MainActor
-class LoginViewModel: GenericMutationViewModel<LoginRequest, LoginResponse> {
-    @Inject var tokenStorage: TokenStorage
-    
+class LoginViewModel: AuthLoginViewModel<LoginRequest, LoginResponse> {
     @Published var email = ""
     @Published var password = ""
-    @Published var isLoggedIn = false
     
-    // Called automatically on success
-    override func onSuccess(_ response: LoginResponse) async {
-        tokenStorage.save(response.token)
-        isLoggedIn = true
+    // Auto-extracts token and notifies AuthState!
+    override func extractToken(from response: LoginResponse) -> String? {
+        return response.token
     }
     
-    // Called automatically on failure
-    override func onFailure(_ error: NetworkError) async {
-        // Custom error handling
+    override func extractUser(from response: LoginResponse) -> (any Sendable)? {
+        return response.user
     }
     
     func login() async {
         await execute(LoginRequest(email: email, password: password))
+    }
+}
+```
+
+### ContentView.swift (Subscribes to AuthState)
+
+```swift
+struct ContentView: View {
+    @ObservedObject var authState = AuthState.shared
+    
+    var body: some View {
+        if authState.isLoggedIn {
+            HomeView()
+        } else {
+            LoginView()
+        }
     }
 }
 ```
@@ -245,11 +256,40 @@ struct LoginView: View {
                 .disabled(vm.isLoading)
         }
         .padding()
-        .onChange(of: vm.isLoggedIn) { _, loggedIn in
-            if loggedIn { /* Navigate to home */ }
-        }
     }
 }
+```
+
+---
+
+## 🔔 AuthState (Central Auth Manager)
+
+```swift
+// Singleton - subscribe to auth state
+@ObservedObject var authState = AuthState.shared
+
+// Logout
+AuthState.shared.logout()
+
+// Check auth events (Combine)
+AuthState.shared.authEvents
+    .sink { event in
+        switch event {
+        case .loggedIn: print("Logged in")
+        case .loggedOut: print("Logged out")
+        case .sessionExpired: print("Session expired")
+        }
+    }
+```
+
+### Auth Flow
+
+```
+LoginViewModel → AuthState.onLoginSuccess() → Views update
+                         ↓
+          @Published isLoggedIn = true
+                         ↓
+         ContentView.body re-renders → HomeView()
 ```
 
 ---
