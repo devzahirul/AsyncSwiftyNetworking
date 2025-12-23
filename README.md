@@ -273,10 +273,17 @@ struct MyApp: App {
     init() {
         DI.configure { di in
             di.baseURL = "https://api.example.com"
-            di.tokenStorage = KeychainTokenStorage()
-            di.register(NetworkClient.self) {
+            
+            // Register TokenStorage as singleton
+            let storage = KeychainTokenStorage()
+            di.registerSingleton(TokenStorage.self, instance: storage)
+            
+            // Register NetworkClient with baseURL configured
+            di.register(URLSessionNetworkClient.self) {
                 URLSessionNetworkClient.quick(baseURL: di.baseURL)
             }
+            
+            // Register services
             di.register(AuthService.self) { AuthServiceImpl() }
         }
     }
@@ -314,18 +321,19 @@ protocol AuthService {
 }
 
 class AuthServiceImpl: AuthService {
-    @Inject var client: NetworkClient
+    @Inject var client: URLSessionNetworkClient  // Uses URLSessionNetworkClient for baseURL
+    @Inject var tokenStorage: TokenStorage       // Injected, not DI.shared!
     
     func login(email: String, password: String) async throws -> LoginResponse {
+        // No baseUrl needed - client has it configured!
         try await client.request(
             RequestBuilder.post("/auth/login")
-                .body(LoginRequest(email: email, password: password)),
-            baseUrl: DI.shared.baseURL
+                .body(LoginRequest(email: email, password: password))
         )
     }
     
     func logout() {
-        DI.shared.tokenStorage?.clearToken()
+        tokenStorage.clearToken()
         DI.shared.clearViewModels()
     }
 }
