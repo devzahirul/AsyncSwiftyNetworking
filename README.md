@@ -165,6 +165,102 @@ let client = URLSessionNetworkClient.withAuth(
 )
 ```
 
+## 💉 Dependency Injection
+
+### DI Container Setup
+
+```swift
+import AsyncSwiftyNetworking
+
+// Configure once at app startup
+DI.configure { di in
+    di.baseURL = "https://api.example.com"
+    di.tokenStorage = KeychainTokenStorage()
+    
+    // Register services
+    di.register(NetworkClient.self) {
+        URLSessionNetworkClient.quick(baseURL: di.baseURL)
+    }
+    di.register(ProfileService.self) { ProfileServiceImpl() }
+    di.register(UserService.self) { UserServiceImpl() }
+}
+```
+
+### @Inject Property Wrapper
+
+```swift
+// Services auto-resolve from DI container
+class ProfileServiceImpl: ProfileService {
+    @Inject var client: NetworkClient  // Auto-injected!
+    
+    func getProfile() async throws -> Profile {
+        try await client.request(.get("/profile"))
+    }
+}
+```
+
+### @HiltViewModel (Like Android's `by viewModels()`)
+
+ViewModels are cached in a HashMap - same instance returned on re-entry:
+
+```swift
+// Define ViewModel
+class ProfileVM: ObservableObject, DefaultInitializable {
+    @Inject var service: ProfileService
+    
+    @Published var profile: Profile?
+    
+    required init() {}
+    
+    func load() async {
+        profile = try? await service.getProfile()
+    }
+}
+
+// Use in View - cached by type!
+struct ProfileView: View {
+    @HiltViewModel(ProfileVM.self) var vm
+    
+    var body: some View {
+        if let profile = vm.profile {
+            Text(profile.name)
+        }
+    }
+    .task { await vm.load() }
+}
+```
+
+### ViewModel with Parameters
+
+```swift
+class UserDetailVM: ObservableObject {
+    @Inject var service: UserService
+    
+    let userId: String
+    @Published var user: User?
+    
+    init(userId: String) {
+        self.userId = userId
+    }
+}
+
+struct UserDetailView: View {
+    let userId: String
+    
+    // Custom key for unique caching
+    @HiltViewModel(key: "user-\(userId)", factory: { UserDetailVM(userId: userId) }) var vm
+}
+```
+
+### Clean Architecture Flow
+
+```
+View → ViewModel → Service → NetworkClient
+           ↑            ↑
+           └──── @Inject ────┘
+```
+
+
 ## ⚠️ Error Handling
 
 ### User-Friendly Error Messages
