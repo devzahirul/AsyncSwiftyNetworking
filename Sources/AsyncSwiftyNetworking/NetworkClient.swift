@@ -82,6 +82,12 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
     private let responseInterceptors: [ResponseInterceptor]
     private let retryExecutor = RetryExecutor()
     
+    // Internal properties for convenience extensions
+    internal let _baseURL: String?
+    internal let _hasLoggingInterceptor: Bool
+    internal let _hasAuthInterceptor: Bool
+    internal let _hasRefreshInterceptor: Bool
+    
     /// Shared decoder to avoid recreating it multiple times.
     public static let defaultDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -117,6 +123,33 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         self.decoder = decoder
         self.requestInterceptors = requestInterceptors
         self.responseInterceptors = responseInterceptors
+        self._baseURL = nil
+        self._hasLoggingInterceptor = false
+        self._hasAuthInterceptor = false
+        self._hasRefreshInterceptor = false
+    }
+    
+    /// Internal initializer with full configuration for convenience factory methods.
+    internal init(
+        session: any URLSessionProtocol = URLSession.shared,
+        configuration: NetworkConfiguration = .default,
+        decoder: JSONDecoder = URLSessionNetworkClient.defaultDecoder,
+        requestInterceptors: [RequestInterceptor] = [],
+        responseInterceptors: [ResponseInterceptor] = [],
+        baseURL: String?,
+        hasLoggingInterceptor: Bool,
+        hasAuthInterceptor: Bool,
+        hasRefreshInterceptor: Bool
+    ) {
+        self.session = session
+        self.configuration = configuration
+        self.decoder = decoder
+        self.requestInterceptors = requestInterceptors
+        self.responseInterceptors = responseInterceptors
+        self._baseURL = baseURL
+        self._hasLoggingInterceptor = hasLoggingInterceptor
+        self._hasAuthInterceptor = hasAuthInterceptor
+        self._hasRefreshInterceptor = hasRefreshInterceptor
     }
     
     /// Convenience initializer with common interceptors.

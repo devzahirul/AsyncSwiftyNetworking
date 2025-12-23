@@ -258,3 +258,39 @@ struct TestUserResponse: HTTPResponseDecodable, Equatable, Codable {
 struct EmptyResponse: HTTPResponseDecodable, Equatable {
     var statusCode: Int?
 }
+
+// MARK: - Mock Token Refresh Handler
+
+/// A mock implementation of TokenRefreshHandler for testing.
+final class MockTokenRefreshHandler: TokenRefreshHandler, @unchecked Sendable {
+    
+    private(set) var refreshCallCount = 0
+    private(set) var failureErrors: [Error] = []
+    
+    var mockNewToken: String = "new-mock-token"
+    var shouldFail: Bool = false
+    var failureError: Error = NetworkError.unknown
+    
+    func refreshToken() async throws -> String {
+        refreshCallCount += 1
+        
+        if shouldFail {
+            throw failureError
+        }
+        
+        return mockNewToken
+    }
+    
+    func onRefreshFailure(_ error: Error) async {
+        failureErrors.append(error)
+    }
+    
+    func reset() {
+        refreshCallCount = 0
+        failureErrors = []
+        mockNewToken = "new-mock-token"
+        shouldFail = false
+        failureError = NetworkError.unknown
+    }
+}
+

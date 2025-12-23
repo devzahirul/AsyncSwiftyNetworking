@@ -208,4 +208,101 @@ public enum NetworkError: Error, Equatable, Sendable, LocalizedError, CustomStri
             return .underlying(urlError.localizedDescription)
         }
     }
+    
+    // MARK: - User-Friendly Messages
+    
+    /// A user-friendly message suitable for display in UI
+    public var userMessage: String {
+        switch self {
+        case .invalidURL:
+            return "The request could not be completed. Please try again."
+        case .noData:
+            return "No data was received. Please try again."
+        case .decodingError:
+            return "We couldn't process the server's response. Please contact support."
+        case .serverError(let statusCode, let message, _):
+            if let message = message, !message.isEmpty {
+                return message
+            }
+            if (500...599).contains(statusCode) {
+                return "The server is temporarily unavailable. Please try again later."
+            }
+            return "Something went wrong. Please try again."
+        case .underlying:
+            return "An unexpected error occurred. Please try again."
+        case .unknown:
+            return "An unknown error occurred. Please try again."
+        case .timeout:
+            return "The request timed out. Please check your connection and try again."
+        case .noConnection:
+            return "No internet connection. Please check your network settings."
+        case .cancelled:
+            return "The request was cancelled."
+        case .sslError:
+            return "A secure connection could not be established. Please contact support."
+        case .retryExhausted:
+            return "The request failed after multiple attempts. Please try again later."
+        case .rateLimited(let retryAfter):
+            if let seconds = retryAfter {
+                return "Too many requests. Please wait \(Int(seconds)) seconds."
+            }
+            return "Too many requests. Please wait a moment before trying again."
+        case .unauthorized:
+            return "Your session has expired. Please sign in again."
+        case .notFound:
+            return "The requested item could not be found."
+        }
+    }
+    
+    // MARK: - Recovery Actions
+    
+    /// Suggested recovery action for this error
+    public var recoveryAction: RecoveryAction {
+        switch self {
+        case .noConnection, .timeout, .retryExhausted:
+            return .retry
+        case .serverError(let statusCode, _, _):
+            if (500...599).contains(statusCode) {
+                return .retry
+            }
+            return .none
+        case .rateLimited:
+            return .retry
+        case .unauthorized:
+            return .reauthenticate
+        case .decodingError, .sslError:
+            return .contactSupport
+        case .invalidURL, .noData, .underlying, .unknown, .cancelled, .notFound:
+            return .none
+        }
+    }
 }
+
+// MARK: - Recovery Action
+
+/// Suggested recovery actions for network errors
+public enum RecoveryAction: Equatable, Sendable {
+    /// User should retry the request
+    case retry
+    /// User should re-authenticate (login again)
+    case reauthenticate
+    /// User should contact support
+    case contactSupport
+    /// No recovery action available
+    case none
+    
+    /// Suggested button title for the recovery action
+    public var buttonTitle: String? {
+        switch self {
+        case .retry:
+            return "Try Again"
+        case .reauthenticate:
+            return "Sign In"
+        case .contactSupport:
+            return "Contact Support"
+        case .none:
+            return nil
+        }
+    }
+}
+
