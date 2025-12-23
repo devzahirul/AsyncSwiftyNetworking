@@ -202,7 +202,7 @@ class MyRefreshHandler: TokenRefreshHandler {
 ## 📝 Full Login Example
 
 ```swift
-// MARK: - Models
+// MARK: - 1. Models + Typealias
 
 struct LoginRequest: Encodable {
     let email: String
@@ -215,7 +215,13 @@ struct LoginResponse: Codable, HTTPResponseDecodable {
     let user: User
 }
 
-// MARK: - Service
+struct User: Codable, Identifiable {
+    let id: String
+    let name: String
+    let email: String
+}
+
+// MARK: - 2. Service
 
 class AuthService {
     @Inject var client: URLSessionNetworkClient
@@ -231,9 +237,30 @@ class AuthService {
     func saveToken(_ token: String) {
         tokenStorage.save(token)
     }
+    
+    func logout() {
+        tokenStorage.clearToken()
+        DI.shared.clearViewModels()
+    }
 }
 
-// MARK: - ViewModel
+// MARK: - 3. DI Setup
+
+// In your App init:
+DI.configure { di in
+    di.baseURL = "https://api.example.com"
+    
+    let storage = KeychainTokenStorage()
+    di.registerSingleton(TokenStorage.self, instance: storage)
+    
+    di.register(URLSessionNetworkClient.self) {
+        URLSessionNetworkClient.quick(baseURL: di.baseURL)
+    }
+    
+    di.register(AuthService.self) { AuthService() }
+}
+
+// MARK: - 4. ViewModel
 
 @MainActor
 class LoginVM: ObservableObject {
@@ -243,37 +270,83 @@ class LoginVM: ObservableObject {
     @Published var password = ""
     @Published var isLoading = false
     @Published var error: String?
+    @Published var isLoggedIn = false
     
     func login() async {
+        guard !email.isEmpty, !password.isEmpty else {
+            error = "Please enter email and password"
+            return
+        }
+        
         isLoading = true
+        error = nil
+        
         do {
             let response = try await authService.login(email: email, password: password)
             authService.saveToken(response.token)
+            isLoggedIn = true
         } catch let e as NetworkError {
             error = e.userMessage
+        } catch {
+            self.error = "Login failed"
         }
+        
         isLoading = false
     }
 }
 
-// MARK: - View
+// MARK: - 5. Views
 
-struct LoginView: View {
+struct ContentView: View {
     @StateObject var vm = LoginVM()
     
     var body: some View {
+        if vm.isLoggedIn {
+            HomeView()
+        } else {
+            LoginView(vm: vm)
+        }
+    }
+}
+
+struct LoginView: View {
+    @ObservedObject var vm: LoginVM
+    
+    var body: some View {
         VStack(spacing: 20) {
+            Text("Login").font(.largeTitle.bold())
+            
             TextField("Email", text: $vm.email)
+                .textFieldStyle(.roundedBorder)
+                .autocapitalization(.none)
+            
             SecureField("Password", text: $vm.password)
+                .textFieldStyle(.roundedBorder)
             
             if let error = vm.error {
-                Text(error).foregroundColor(.red)
+                Text(error)
+                    .foregroundColor(.red)
+                    .font(.caption)
             }
             
-            Button("Login") { Task { await vm.login() } }
-                .disabled(vm.isLoading)
+            Button(action: { Task { await vm.login() } }) {
+                if vm.isLoading {
+                    ProgressView()
+                } else {
+                    Text("Login")
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(vm.isLoading)
         }
         .padding()
+    }
+}
+
+struct HomeView: View {
+    var body: some View {
+        Text("Welcome! 🎉").font(.title)
     }
 }
 ```
