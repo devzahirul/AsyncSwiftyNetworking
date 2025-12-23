@@ -261,6 +261,173 @@ View → ViewModel → Service → NetworkClient
 ```
 
 
+### 📱 Full SwiftUI Login Example
+
+Complete login flow with DI architecture:
+
+```swift
+// MARK: - 1. App Setup
+
+@main
+struct MyApp: App {
+    init() {
+        DI.configure { di in
+            di.baseURL = "https://api.example.com"
+            di.tokenStorage = KeychainTokenStorage()
+            di.register(NetworkClient.self) {
+                URLSessionNetworkClient.quick(baseURL: di.baseURL)
+            }
+            di.register(AuthService.self) { AuthServiceImpl() }
+        }
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+// MARK: - 2. Models
+
+struct LoginRequest: Encodable {
+    let email: String
+    let password: String
+}
+
+struct LoginResponse: Decodable, HTTPResponseDecodable {
+    let token: String
+    let user: User
+}
+
+struct User: Decodable, Identifiable {
+    let id: String
+    let name: String
+    let email: String
+}
+
+// MARK: - 3. Service
+
+protocol AuthService {
+    func login(email: String, password: String) async throws -> LoginResponse
+    func logout()
+}
+
+class AuthServiceImpl: AuthService {
+    @Inject var client: NetworkClient
+    
+    func login(email: String, password: String) async throws -> LoginResponse {
+        try await client.request(
+            RequestBuilder.post("/auth/login")
+                .body(LoginRequest(email: email, password: password)),
+            baseUrl: DI.shared.baseURL
+        )
+    }
+    
+    func logout() {
+        DI.shared.tokenStorage?.clearToken()
+        DI.shared.clearViewModels()
+    }
+}
+
+// MARK: - 4. ViewModel
+
+@MainActor
+class LoginVM: ObservableObject, DefaultInitializable {
+    @Inject var authService: AuthService
+    
+    @Published var email = ""
+    @Published var password = ""
+    @Published var isLoading = false
+    @Published var error: String?
+    @Published var isLoggedIn = false
+    
+    required init() {}
+    
+    func login() async {
+        guard !email.isEmpty, !password.isEmpty else {
+            error = "Please enter email and password"
+            return
+        }
+        
+        isLoading = true
+        error = nil
+        
+        do {
+            let response = try await authService.login(email: email, password: password)
+            DI.shared.tokenStorage?.save(response.token)
+            isLoggedIn = true
+        } catch let networkError as NetworkError {
+            error = networkError.userMessage
+        } catch {
+            self.error = "Login failed"
+        }
+        
+        isLoading = false
+    }
+}
+
+// MARK: - 5. Views
+
+struct ContentView: View {
+    @HiltViewModel(LoginVM.self) var vm
+    
+    var body: some View {
+        if vm.isLoggedIn {
+            HomeView()
+        } else {
+            LoginView(vm: vm)
+        }
+    }
+}
+
+struct LoginView: View {
+    @ObservedObject var vm: LoginVM
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Login")
+                .font(.largeTitle.bold())
+            
+            TextField("Email", text: $vm.email)
+                .textFieldStyle(.roundedBorder)
+                .textContentType(.emailAddress)
+                .autocapitalization(.none)
+            
+            SecureField("Password", text: $vm.password)
+                .textFieldStyle(.roundedBorder)
+                .textContentType(.password)
+            
+            if let error = vm.error {
+                Text(error)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
+            
+            Button(action: { Task { await vm.login() } }) {
+                if vm.isLoading {
+                    ProgressView()
+                } else {
+                    Text("Login")
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(vm.isLoading)
+        }
+        .padding()
+    }
+}
+
+struct HomeView: View {
+    var body: some View {
+        Text("Welcome! 🎉")
+            .font(.title)
+    }
+}
+```
+
+
 ## ⚠️ Error Handling
 
 ### User-Friendly Error Messages
