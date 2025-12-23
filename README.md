@@ -3,6 +3,7 @@
   <img src="https://img.shields.io/badge/Platforms-iOS%20|%20macOS%20|%20tvOS%20|%20watchOS%20|%20visionOS-blue.svg" alt="Platforms">
   <img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg" alt="SPM">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" alt="License">
+  <a href="https://github.com/devzahirul/AsyncSwiftyNetworking/actions"><img src="https://github.com/devzahirul/AsyncSwiftyNetworking/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 </p>
 
 # AsyncSwiftyNetworking
@@ -12,12 +13,15 @@ A modern, production-ready Swift networking library built with async/await. Feat
 ## ✨ Features
 
 - 🚀 **Modern Swift Concurrency** - Built entirely with async/await
+- ⚡ **Quick Start API** - One-liner setup with `quick()`, `withAuth()`, `mobile()` factory methods
+- 🛠️ **Fluent Request Builder** - Build requests without defining Endpoint enums
 - 🔄 **Automatic Token Refresh** - Seamless 401 handling with refresh tokens
 - 🔁 **Configurable Retry Policies** - Exponential backoff, fixed delay, or custom
 - 🔗 **Interceptor Chain** - Request/response transformation pipeline
 - 📦 **Multipart Uploads** - Easy file and image uploads
 - 📄 **Pagination Support** - Built-in paginated request handling
 - 🔐 **Secure Token Storage** - Keychain integration out of the box
+- ⚠️ **Smart Error Recovery** - User-friendly messages with recovery suggestions
 - ✅ **100% Testable** - Protocol-based architecture with mock session support
 - 📱 **Multi-Platform** - iOS 15+, macOS 12+, tvOS 15+, watchOS 8+, visionOS 1+
 
@@ -37,21 +41,49 @@ Or in Xcode: **File → Add Package Dependencies** → paste the repository URL.
 
 ## 🚀 Quick Start
 
-### 1. Define Your Endpoints
+### Option 1: Fluent Request Builder (Fastest)
+
+No need to define Endpoint enums - just build and execute:
 
 ```swift
 import AsyncSwiftyNetworking
 
+// One-liner setup
+let client = URLSessionNetworkClient.quick(baseURL: "https://api.example.com")
+
+// GET request with fluent builder
+let user: User = try await client.request(
+    RequestBuilder.get("/users/1")
+)
+
+// POST with headers and body
+let newUser: User = try await client.request(
+    RequestBuilder.post("/users")
+        .header("X-API-Key", apiKey)
+        .body(CreateUserRequest(name: "John", email: "john@example.com"))
+)
+
+// Full chain example
+let result: SearchResponse = try await client.request(
+    RequestBuilder.get("/search")
+        .query("q", "swift")
+        .query("limit", "20")
+        .header("Accept-Language", "en")
+        .timeout(30)
+)
+```
+
+### Option 2: Type-Safe Endpoints (Recommended for larger projects)
+
+```swift
 enum UserAPI: Endpoint {
     case getUser(id: Int)
     case createUser(name: String, email: String)
-    case updateUser(id: Int, name: String)
-    case deleteUser(id: Int)
     
     var path: String {
         switch self {
         case .getUser(let id): return "/users/\(id)"
-        case .createUser, .updateUser, .deleteUser: return "/users"
+        case .createUser: return "/users"
         }
     }
     
@@ -59,8 +91,6 @@ enum UserAPI: Endpoint {
         switch self {
         case .getUser: return .get
         case .createUser: return .post
-        case .updateUser: return .put
-        case .deleteUser: return .delete
         }
     }
     
@@ -73,35 +103,29 @@ enum UserAPI: Endpoint {
         }
     }
 }
+
+// Use the endpoint
+let user: User = try await client.request(UserAPI.getUser(id: 123))
 ```
 
-### 2. Define Response Models
+## ⚡ Convenience Factory Methods
 
 ```swift
-struct User: HTTPResponseDecodable {
-    let id: Int
-    let name: String
-    let email: String
-    var statusCode: Int?
-}
-```
-
-### 3. Make Requests
-
-```swift
-let client = URLSessionNetworkClient()
-
-// GET request
-let user: User = try await client.request(
-    UserAPI.getUser(id: 123),
-    baseUrl: "https://api.example.com"
+// Quick prototyping - minimal setup
+let client = URLSessionNetworkClient.quick(
+    baseURL: "https://api.example.com",
+    logging: true  // Enable request/response logging
 )
 
-// POST request
-let newUser: User = try await client.request(
-    UserAPI.createUser(name: "John", email: "john@example.com"),
-    baseUrl: "https://api.example.com"
+// Full authentication flow with auto-refresh
+let client = URLSessionNetworkClient.withAuth(
+    baseURL: "https://api.example.com",
+    tokenStorage: KeychainTokenStorage(),
+    refreshHandler: MyRefreshHandler()
 )
+
+// Mobile-optimized (60s timeout, exponential backoff retry)
+let client = URLSessionNetworkClient.mobile(baseURL: "https://api.example.com")
 ```
 
 ## 🔐 Authentication
@@ -124,28 +148,75 @@ let client = URLSessionNetworkClient(
 // 1. Implement your refresh handler
 final class MyRefreshHandler: TokenRefreshHandler {
     func refreshToken() async throws -> String {
-        // Call your refresh endpoint
         let response = try await refreshAPI()
         return response.accessToken
     }
     
     func onRefreshFailure(_ error: Error) async {
-        // Handle logout
         NotificationCenter.default.post(name: .sessionExpired, object: nil)
     }
 }
 
-// 2. Configure the client
-let storage = KeychainExtendedTokenStorage()
-let refreshInterceptor = RefreshTokenInterceptor(
-    tokenStorage: storage,
+// 2. Use the withAuth factory method (easiest)
+let client = URLSessionNetworkClient.withAuth(
+    baseURL: "https://api.example.com",
+    tokenStorage: KeychainTokenStorage(),
     refreshHandler: MyRefreshHandler()
 )
+```
 
-let client = URLSessionNetworkClient(
-    requestInterceptors: [refreshInterceptor],
-    responseInterceptors: [refreshInterceptor]  // Handles 401 responses
-)
+## ⚠️ Error Handling
+
+### User-Friendly Error Messages
+
+```swift
+do {
+    let user = try await client.request(UserAPI.getUser(id: 123))
+} catch let error as NetworkError {
+    // Show user-friendly message in UI
+    showAlert(
+        title: "Error",
+        message: error.userMessage  // "No internet connection. Please check your network settings."
+    )
+    
+    // Handle suggested recovery action
+    switch error.recoveryAction {
+    case .retry:
+        showRetryButton(title: error.recoveryAction.buttonTitle)  // "Try Again"
+    case .reauthenticate:
+        navigateToLogin()  // Button title: "Sign In"
+    case .contactSupport:
+        showSupportInfo()  // Button title: "Contact Support"
+    case .none:
+        break
+    }
+}
+```
+
+### Programmatic Error Handling
+
+```swift
+catch let error as NetworkError {
+    switch error {
+    case .unauthorized:
+        // Redirect to login
+    case .notFound:
+        // Handle 404
+    case .noConnection:
+        // Show offline message
+    case .timeout:
+        // Suggest retry
+    case .serverError(let code, let message, _):
+        // Log server error
+    default:
+        print(error.localizedDescription)
+    }
+    
+    // Helper properties
+    if error.isRetryable { /* safe to retry */ }
+    if error.isClientError { /* 4xx error */ }
+    if error.isServerError { /* 5xx error */ }
+}
 ```
 
 ## 🔁 Retry Policies
@@ -162,7 +233,7 @@ let config = NetworkConfiguration(
 )
 
 // Mobile-optimized preset (60s timeout, 3 retries)
-let client = URLSessionNetworkClient(configuration: .mobile)
+let client = URLSessionNetworkClient.mobile(baseURL: "https://api.example.com")
 ```
 
 ## 📦 Multipart Uploads
@@ -202,34 +273,6 @@ let response: PaginatedResponse<User> = try await client.requestPaginated(
 
 print("Users: \(response.data)")
 print("Has more: \(response.hasNextPage)")
-```
-
-## ⚠️ Error Handling
-
-```swift
-do {
-    let user = try await client.request(UserAPI.getUser(id: 123), baseUrl: baseURL)
-} catch let error as NetworkError {
-    switch error {
-    case .unauthorized:
-        // Redirect to login
-    case .notFound:
-        // Handle 404
-    case .noConnection:
-        // Show offline message
-    case .timeout:
-        // Suggest retry
-    case .serverError(let code, let message, _):
-        // Log server error
-    default:
-        print(error.localizedDescription)
-    }
-    
-    // Helper properties
-    if error.isRetryable { /* safe to retry */ }
-    if error.isClientError { /* 4xx error */ }
-    if error.isServerError { /* 5xx error */ }
-}
 ```
 
 ## 🔗 Custom Interceptors
@@ -292,10 +335,8 @@ class UserServiceTests: XCTestCase {
     }
     
     func testNetworkError() async {
-        // Arrange
         mockSession.mockError(statusCode: 404)
         
-        // Act & Assert
         do {
             let _: User = try await client.request(
                 UserAPI.getUser(id: 999),
@@ -318,15 +359,14 @@ class UserViewModel: ObservableObject {
     @Published var error: NetworkError?
     @Published var isLoading = false
     
-    private let client = URLSessionNetworkClient()
+    private let client = URLSessionNetworkClient.quick(baseURL: "https://api.example.com")
     
     func loadUser(id: Int) {
         isLoading = true
         Task {
             do {
                 user = try await client.request(
-                    UserAPI.getUser(id: id),
-                    baseUrl: "https://api.example.com"
+                    RequestBuilder.get("/users/\(id)")
                 )
             } catch let networkError as NetworkError {
                 error = networkError
@@ -345,6 +385,7 @@ Sources/AsyncSwiftyNetworking/
 │   ├── NetworkConfiguration.swift    # Timeout & retry settings
 │   ├── URLSessionProtocol.swift      # Testable session abstraction
 │   ├── RequestInterceptor.swift      # Request/response interceptors
+│   ├── RequestBuilder.swift          # Fluent request builder ✨
 │   ├── AuthInterceptor.swift         # Bearer token injection
 │   ├── RefreshTokenInterceptor.swift # Automatic token refresh
 │   ├── LoggingInterceptor.swift      # OSLog-based logging
@@ -353,7 +394,8 @@ Sources/AsyncSwiftyNetworking/
 │   ├── MultipartFormData.swift       # File upload support
 │   └── PaginatedResponse.swift       # Pagination helpers
 ├── NetworkClient.swift               # Main client protocol & implementation
-├── NetworkError.swift                # Comprehensive error types
+├── URLSessionNetworkClient+Conv...   # Convenience factory methods ✨
+├── NetworkError.swift                # Error types + recovery actions ✨
 ├── Endpoint.swift                    # API endpoint protocol
 └── HTTPResponseDecodable.swift       # Response decoding protocol
 ```
