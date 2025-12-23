@@ -67,9 +67,13 @@ struct User: Codable, HTTPResponseDecodable, Identifiable {
 ```swift
 import AsyncSwiftyNetworking
 
-// Define all service typealiases here
+// Fetch services
 typealias ProfileService = GenericNetworkService<Profile>
 typealias UserListService = GenericListService<User>
+
+// Mutation services (POST/PUT/DELETE)
+typealias LoginService = GenericMutationService<LoginRequest, LoginResponse>
+typealias SignupService = GenericMutationService<SignupRequest, SignupResponse>
 ```
 
 ### 3. ViewModelType.swift
@@ -77,9 +81,12 @@ typealias UserListService = GenericListService<User>
 ```swift
 import AsyncSwiftyNetworking
 
-// Define all ViewModel typealiases here
+// Fetch ViewModels
 typealias ProfileViewModel = GenericNetworkViewModel<Profile>
 typealias UserListViewModel = GenericListViewModel<User>
+
+// Mutation ViewModels (subclass for custom behavior)
+typealias LoginViewModelBase = GenericMutationViewModel<LoginRequest, LoginResponse>
 ```
 
 ### 4. DI.swift
@@ -158,71 +165,59 @@ struct UsersView: View {
 
 ---
 
-## 📝 Full Login Example
+## 📝 Full Login Example (Using GenericMutation)
 
-### ServiceType.swift (add)
-
-```swift
-typealias AuthServiceType = AuthService
-```
-
-### AuthService.swift
+### Models.swift
 
 ```swift
-class AuthService {
-    @Inject var client: URLSessionNetworkClient
-    @Inject var tokenStorage: TokenStorage
-    
-    func login(email: String, password: String) async throws -> LoginResponse {
-        try await client.request(
-            RequestBuilder.post("/auth/login")
-                .body(LoginRequest(email: email, password: password))
-        )
-    }
-    
-    func saveToken(_ token: String) {
-        tokenStorage.save(token)
-    }
-    
-    func logout() {
-        tokenStorage.clearToken()
-        DI.shared.clearViewModels()
-    }
+struct LoginRequest: Encodable {
+    let email: String
+    let password: String
+}
+
+struct LoginResponse: Codable, HTTPResponseDecodable {
+    var statusCode: Int?
+    let token: String
+    let user: User
 }
 ```
 
-### DI.swift (add)
+### ServiceType.swift
 
 ```swift
-di.register(AuthServiceType.self) { AuthService() }
+typealias LoginService = GenericMutationService<LoginRequest, LoginResponse>
 ```
 
-### LoginViewModel.swift
+### DI.swift
+
+```swift
+di.register(LoginService.self) { LoginService(.post, "/auth/login") }
+```
+
+### LoginViewModel.swift (Subclass for custom behavior)
 
 ```swift
 @MainActor
-class LoginViewModel: ObservableObject {
-    @Inject var authService: AuthServiceType
+class LoginViewModel: GenericMutationViewModel<LoginRequest, LoginResponse> {
+    @Inject var tokenStorage: TokenStorage
     
     @Published var email = ""
     @Published var password = ""
-    @Published var isLoading = false
-    @Published var error: String?
     @Published var isLoggedIn = false
     
+    // Called automatically on success
+    override func onSuccess(_ response: LoginResponse) async {
+        tokenStorage.save(response.token)
+        isLoggedIn = true
+    }
+    
+    // Called automatically on failure
+    override func onFailure(_ error: NetworkError) async {
+        // Custom error handling
+    }
+    
     func login() async {
-        isLoading = true
-        error = nil
-        
-        do {
-            let response = try await authService.login(email: email, password: password)
-            authService.saveToken(response.token)
-            isLoggedIn = true
-        } catch let e as NetworkError {
-            error = e.userMessage
-        }
-        
-        isLoading = false
+        await execute(LoginRequest(email: email, password: password))
     }
 }
 ```
@@ -242,7 +237,7 @@ struct LoginView: View {
                 .textFieldStyle(.roundedBorder)
             
             if let error = vm.error {
-                Text(error).foregroundColor(.red)
+                Text(error.userMessage).foregroundColor(.red)
             }
             
             Button("Login") { Task { await vm.login() } }
@@ -250,6 +245,9 @@ struct LoginView: View {
                 .disabled(vm.isLoading)
         }
         .padding()
+        .onChange(of: vm.isLoggedIn) { _, loggedIn in
+            if loggedIn { /* Navigate to home */ }
+        }
     }
 }
 ```
