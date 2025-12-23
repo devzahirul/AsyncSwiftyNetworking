@@ -8,17 +8,14 @@
 
 # AsyncSwiftyNetworking
 
-A modern, production-ready Swift networking library with **minimal boilerplate**. Built with async/await, featuring generic services, dependency injection, and SwiftUI integration.
+A modern Swift networking library with **zero boilerplate**. Built with async/await, generic services, and Hilt-style dependency injection.
 
 ## ✨ Features
 
-- 🚀 **Zero Boilerplate** - Generic service, ViewModel & views - just define your model
-- 💉 **Hilt-Style DI** - `@Inject`, `@HiltViewModel` with HashMap caching
-- 🔄 **Automatic Token Refresh** - Seamless 401 handling with refresh tokens
+- 🚀 **Zero Boilerplate** - Generic service, ViewModel & views
+- 💉 **Hilt-Style DI** - `@Inject`, `@HiltViewModel` with caching
 - 📱 **SwiftUI Ready** - `NetworkDataView` handles loading/error/content
-- 🔁 **Configurable Retry** - Exponential backoff, fixed delay, or custom
-- 📦 **Multipart Uploads** - Easy file and image uploads
-- ✅ **100% Testable** - Protocol-based architecture
+- 🔐 **Auto Token Refresh** - Seamless 401 handling
 
 ## 📦 Installation
 
@@ -30,9 +27,25 @@ dependencies: [
 
 ---
 
-## 🚀 Quick Start (3 Steps!)
+## 📁 Recommended File Structure
 
-### Step 1: Define Model + Typealias
+```
+YourApp/
+├── Networking/
+│   ├── DI.swift              # DI configuration
+│   ├── ServiceType.swift     # Service typealiases
+│   └── ViewModelType.swift   # ViewModel typealiases
+├── Models/
+│   └── Models.swift          # API models
+└── Views/
+    └── ...
+```
+
+---
+
+## 🚀 Quick Start
+
+### 1. Models.swift
 
 ```swift
 struct Profile: Codable, HTTPResponseDecodable {
@@ -42,41 +55,85 @@ struct Profile: Codable, HTTPResponseDecodable {
     let email: String
 }
 
-// Typealias for cleaner code
-typealias ProfileService = GenericNetworkService<Profile>
-typealias ProfileViewModel = GenericNetworkViewModel<Profile>
+struct User: Codable, HTTPResponseDecodable, Identifiable {
+    var statusCode: Int?
+    let id: String
+    let name: String
+}
 ```
 
-### Step 2: Register in DI
+### 2. ServiceType.swift
 
 ```swift
-@main
-struct MyApp: App {
-    init() {
+import AsyncSwiftyNetworking
+
+// Define all service typealiases here
+typealias ProfileService = GenericNetworkService<Profile>
+typealias UserListService = GenericListService<User>
+```
+
+### 3. ViewModelType.swift
+
+```swift
+import AsyncSwiftyNetworking
+
+// Define all ViewModel typealiases here
+typealias ProfileViewModel = GenericNetworkViewModel<Profile>
+typealias UserListViewModel = GenericListViewModel<User>
+```
+
+### 4. DI.swift
+
+```swift
+import AsyncSwiftyNetworking
+
+enum AppDI {
+    static func configure() {
         DI.configure { di in
             di.baseURL = "https://api.example.com"
             
-            // 1. Register NetworkClient
+            // Token Storage
+            let storage = KeychainTokenStorage()
+            di.registerSingleton(TokenStorage.self, instance: storage)
+            
+            // Network Client
             di.register(URLSessionNetworkClient.self) {
                 URLSessionNetworkClient.quick(baseURL: di.baseURL)
             }
             
-            // 2. Register Service (ViewModel auto-resolves it!)
+            // Services
             di.register(ProfileService.self) {
                 ProfileService(.get("/profile"))
             }
             
-            // ⚠️ NO need to register ViewModel!
+            di.register(UserListService.self) {
+                UserListService(.get("/users"))
+            }
         }
     }
 }
 ```
 
-### Step 3: Use in SwiftUI View
+### 5. App.swift
+
+```swift
+@main
+struct MyApp: App {
+    init() {
+        AppDI.configure()
+    }
+    
+    var body: some Scene {
+        WindowGroup { ContentView() }
+    }
+}
+```
+
+### 6. Views
 
 ```swift
 struct ProfileView: View {
-    @HiltViewModel(ProfileViewModel.self) var vm  // Clean!
+    @HiltViewModel(ProfileViewModel.self) var vm
     
     var body: some View {
         NetworkDataView(vm) { profile in
@@ -87,112 +144,14 @@ struct ProfileView: View {
         }
     }
 }
-```
 
-**That's it!** Loading indicator, error handling, and retry are all built-in.
-
----
-
-## 💉 Dependency Injection
-
-### @Inject - Auto-resolve Dependencies
-
-```swift
-class MyService {
-    @Inject var client: URLSessionNetworkClient
+struct UsersView: View {
+    @HiltViewModel(UserListViewModel.self) var vm
     
-    func fetchData() async throws -> Data {
-        try await client.requestData(.get("/data"))
-    }
-}
-```
-
-### @HiltViewModel - Cached ViewModels
-
-```swift
-struct UserView: View {
-    @HiltViewModel(GenericNetworkViewModel<User>.self) var vm  // Cached!
-}
-```
-
-### DI Registration
-
-```swift
-DI.configure { di in
-    // Singleton
-    di.registerSingleton(TokenStorage.self, instance: KeychainTokenStorage())
-    
-    // Factory (new instance each time)
-    di.register(MyService.self) { MyService() }
-    
-    // Generic service for any model
-    di.register(GenericNetworkService<User>.self) {
-        GenericNetworkService(.get("/users/me"))
-    }
-}
-```
-
----
-
-## 📱 SwiftUI Views
-
-### NetworkDataView - Single Resource
-
-```swift
-NetworkDataView(vm) { data in
-    Text(data.name)
-}
-```
-
-### NetworkListDataView - Lists
-
-```swift
-NetworkListDataView(listVM) { item in
-    Text(item.title)
-}
-```
-
-Both handle:
-- ✅ Loading indicator
-- ✅ Error with retry button
-- ✅ Pull to refresh (lists)
-- ✅ Auto-loads on appear
-
----
-
-## 🔐 Authentication
-
-### Setup with Token Refresh
-
-```swift
-DI.configure { di in
-    di.baseURL = "https://api.example.com"
-    
-    let storage = KeychainTokenStorage()
-    di.registerSingleton(TokenStorage.self, instance: storage)
-    
-    di.register(URLSessionNetworkClient.self) {
-        URLSessionNetworkClient.withAuth(
-            baseURL: di.baseURL,
-            tokenStorage: storage,
-            refreshHandler: MyRefreshHandler()
-        )
-    }
-}
-```
-
-### Refresh Handler
-
-```swift
-class MyRefreshHandler: TokenRefreshHandler {
-    func refreshToken() async throws -> String {
-        // Call your refresh API
-        let response = try await refreshAPI()
-        return response.accessToken
-    }
-    
-    func onRefreshFailure(_ error: Error) async {
-        // Navigate to login
+    var body: some View {
+        NetworkListDataView(vm) { user in
+            Text(user.name)
+        }
     }
 }
 ```
@@ -201,28 +160,15 @@ class MyRefreshHandler: TokenRefreshHandler {
 
 ## 📝 Full Login Example
 
+### ServiceType.swift (add)
+
 ```swift
-// MARK: - 1. Models + Typealias
+typealias AuthServiceType = AuthService
+```
 
-struct LoginRequest: Encodable {
-    let email: String
-    let password: String
-}
+### AuthService.swift
 
-struct LoginResponse: Codable, HTTPResponseDecodable {
-    var statusCode: Int?
-    let token: String
-    let user: User
-}
-
-struct User: Codable, Identifiable {
-    let id: String
-    let name: String
-    let email: String
-}
-
-// MARK: - 2. Service
-
+```swift
 class AuthService {
     @Inject var client: URLSessionNetworkClient
     @Inject var tokenStorage: TokenStorage
@@ -243,28 +189,20 @@ class AuthService {
         DI.shared.clearViewModels()
     }
 }
+```
 
-// MARK: - 3. DI Setup
+### DI.swift (add)
 
-// In your App init:
-DI.configure { di in
-    di.baseURL = "https://api.example.com"
-    
-    let storage = KeychainTokenStorage()
-    di.registerSingleton(TokenStorage.self, instance: storage)
-    
-    di.register(URLSessionNetworkClient.self) {
-        URLSessionNetworkClient.quick(baseURL: di.baseURL)
-    }
-    
-    di.register(AuthService.self) { AuthService() }
-}
+```swift
+di.register(AuthServiceType.self) { AuthService() }
+```
 
-// MARK: - 4. ViewModel
+### LoginViewModel.swift
 
+```swift
 @MainActor
-class LoginVM: ObservableObject {
-    @Inject var authService: AuthService
+class LoginViewModel: ObservableObject {
+    @Inject var authService: AuthServiceType
     
     @Published var email = ""
     @Published var password = ""
@@ -273,11 +211,6 @@ class LoginVM: ObservableObject {
     @Published var isLoggedIn = false
     
     func login() async {
-        guard !email.isEmpty, !password.isEmpty else {
-            error = "Please enter email and password"
-            return
-        }
-        
         isLoading = true
         error = nil
         
@@ -287,66 +220,67 @@ class LoginVM: ObservableObject {
             isLoggedIn = true
         } catch let e as NetworkError {
             error = e.userMessage
-        } catch {
-            self.error = "Login failed"
         }
         
         isLoading = false
     }
 }
+```
 
-// MARK: - 5. Views
+### LoginView.swift
 
-struct ContentView: View {
-    @StateObject var vm = LoginVM()
-    
-    var body: some View {
-        if vm.isLoggedIn {
-            HomeView()
-        } else {
-            LoginView(vm: vm)
-        }
-    }
-}
-
+```swift
 struct LoginView: View {
-    @ObservedObject var vm: LoginVM
+    @StateObject var vm = LoginViewModel()
     
     var body: some View {
         VStack(spacing: 20) {
-            Text("Login").font(.largeTitle.bold())
-            
             TextField("Email", text: $vm.email)
                 .textFieldStyle(.roundedBorder)
-                .autocapitalization(.none)
             
             SecureField("Password", text: $vm.password)
                 .textFieldStyle(.roundedBorder)
             
             if let error = vm.error {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.caption)
+                Text(error).foregroundColor(.red)
             }
             
-            Button(action: { Task { await vm.login() } }) {
-                if vm.isLoading {
-                    ProgressView()
-                } else {
-                    Text("Login")
-                        .frame(maxWidth: .infinity)
-                }
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(vm.isLoading)
+            Button("Login") { Task { await vm.login() } }
+                .buttonStyle(.borderedProminent)
+                .disabled(vm.isLoading)
         }
         .padding()
     }
 }
+```
 
-struct HomeView: View {
-    var body: some View {
-        Text("Welcome! 🎉").font(.title)
+---
+
+## 🔐 Authentication with Token Refresh
+
+### DI.swift
+
+```swift
+di.register(URLSessionNetworkClient.self) {
+    URLSessionNetworkClient.withAuth(
+        baseURL: di.baseURL,
+        tokenStorage: storage,
+        refreshHandler: MyRefreshHandler()
+    )
+}
+```
+
+### RefreshHandler.swift
+
+```swift
+class MyRefreshHandler: TokenRefreshHandler {
+    func refreshToken() async throws -> String {
+        let response = try await refreshAPI()
+        return response.accessToken
+    }
+    
+    func onRefreshFailure(_ error: Error) async {
+        // Navigate to login
     }
 }
 ```
@@ -359,12 +293,12 @@ struct HomeView: View {
 // GET
 let user: User = try await client.request(.get("/users/1"))
 
-// POST with body
+// POST
 let created: User = try await client.request(
     .post("/users").body(CreateUserRequest(name: "John"))
 )
 
-// With headers and query params
+// With query & headers
 let results: SearchResponse = try await client.request(
     .get("/search")
         .query("q", "swift")
@@ -374,19 +308,6 @@ let results: SearchResponse = try await client.request(
 
 ---
 
-## ⚠️ Error Handling
-
-```swift
-do {
-    let user = try await client.request(.get("/users/1"))
-} catch let error as NetworkError {
-    print(error.userMessage)       // "No internet connection"
-    print(error.recoveryAction)    // .retry, .reauthenticate, etc.
-}
-```
-
----
-
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License
