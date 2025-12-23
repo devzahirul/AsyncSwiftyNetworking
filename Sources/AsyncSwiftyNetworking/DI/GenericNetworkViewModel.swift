@@ -18,12 +18,20 @@ public final class GenericNetworkViewModel<T: HTTPResponseDecodable>: Observable
         self.service = service
     }
     
+    /// Set service dynamically (for parameterized endpoints)
+    public func setService(_ service: GenericNetworkService<T>) {
+        self.service = service
+    }
+    
     /// Load data from the network
     public func load() async {
         guard !isLoading else { return }
         
         isLoading = true
         error = nil
+        
+        // Yield to let SwiftUI render loading state
+        await Task.yield()
         
         do {
             let resolvedService = getService()
@@ -75,6 +83,9 @@ public final class GenericListViewModel<T: Decodable>: ObservableObject, Default
         
         isLoading = true
         error = nil
+        
+        // Yield to let SwiftUI render loading state
+        await Task.yield()
         
         do {
             let resolvedService = getService()

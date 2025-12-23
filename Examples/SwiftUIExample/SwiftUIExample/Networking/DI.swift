@@ -5,35 +5,54 @@ import AsyncSwiftyNetworking
 
 enum AppDI {
     
+    // TMDB Bearer Token
+    static let tmdbBearerToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjM2ZkM2Y3Mzc4OTFkYTE3YWZiOTY5NzA5MDE0YWQ1MSIsIm5iZiI6MTY4MDA2MjkzMi4zODYsInN1YiI6IjY0MjNiOWQ0YWFlYzcxMDBmMmIzMTdlOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.PM7Zpey8aw8oI2nmp8bT8z8yLEJB1-Ju4wbnflQc534"
+    
     static func configure() {
         DI.configure { di in
-            // Base URL (using JSONPlaceholder for demo)
-            di.baseURL = "https://jsonplaceholder.typicode.com"
+            // Base URL
+            di.baseURL = "https://api.themoviedb.org/3"
             
-            // Token Storage
+            // Token Storage (for session ID)
             let storage = UserDefaultsTokenStorage()
             di.registerSingleton(TokenStorage.self, instance: storage)
             
-            // Network Client
+            // TMDB Bearer Token Interceptor
+            let tmdbAuthInterceptor = TMDBAuthInterceptor(bearerToken: tmdbBearerToken)
+            let loggingInterceptor = LoggingInterceptor(level: .verbose)
+            
+            // Network Client with TMDB auth
             di.register(URLSessionNetworkClient.self) {
-                URLSessionNetworkClient.quick(
+                URLSessionNetworkClient.custom(
                     baseURL: di.baseURL,
-                    logging: true
+                    requestInterceptors: [tmdbAuthInterceptor, loggingInterceptor],
+                    responseInterceptors: [loggingInterceptor]
                 )
             }
             
             // Services
-            di.register(UserService.self) {
-                UserService(.get("/users/1"))
-            }
-            
-            di.register(PostListService.self) {
-                PostListService(.get("/posts"))
-            }
-            
-            di.register(LoginService.self) {
-                LoginService(.post, "/login")
+            di.register(PopularMoviesService.self) {
+                PopularMoviesService(.get("/movie/popular"))
             }
         }
     }
 }
+
+// MARK: - TMDB Auth Interceptor
+
+class TMDBAuthInterceptor: RequestInterceptor {
+    private let bearerToken: String
+    
+    init(bearerToken: String) {
+        self.bearerToken = bearerToken
+    }
+    
+    func intercept(_ request: URLRequest) async throws -> URLRequest {
+        var req = request
+        req.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        return req
+    }
+}
+
+

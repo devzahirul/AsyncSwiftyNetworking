@@ -26,18 +26,34 @@ open class GenericMutationViewModel<Request: Encodable, Response: HTTPResponseDe
         error = nil
         isSuccess = false
         
-        do {
-            response = try await getService().execute(request)
+        // Yield to let SwiftUI render loading state
+        await Task.yield()
+        
+        // Run network work on background thread
+        let result: Result<Response, Error> = await Task.detached(priority: .userInitiated) { [self] in
+            do {
+                let response = try await self.getService().execute(request)
+                return .success(response)
+            } catch {
+                return .failure(error)
+            }
+        }.value
+        
+        switch result {
+        case .success(let response):
+            self.response = response
             isSuccess = true
-            await onSuccess(response!)
-        } catch is CancellationError {
-            // Ignored
-        } catch let networkError as NetworkError {
-            error = networkError
-            await onFailure(networkError)
-        } catch {
-            self.error = .unknown
-            await onFailure(.unknown)
+            await onSuccess(response)
+        case .failure(let error):
+            if error is CancellationError {
+                // Ignored
+            } else if let networkError = error as? NetworkError {
+                self.error = networkError
+                await onFailure(networkError)
+            } else {
+                self.error = .unknown
+                await onFailure(.unknown)
+            }
         }
         
         isLoading = false

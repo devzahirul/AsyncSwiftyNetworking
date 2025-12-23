@@ -3,32 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		1AF368976451672557C8851D /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4455DEF06E02307B6AE23890 /* DI.swift */; };
-		6A93B47BA65A6BEB64088349 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB9A9B4CA4EA46E8630349C /* LoginView.swift */; };
+		46F4625EA6428B34517896BC /* TMDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25FE325016EE2E6F2CA4D7D4 /* TMDBModels.swift */; };
 		B384A5F412AB561FF7C2884D /* ServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32724202B83012E72B75B98E /* ServiceType.swift */; };
 		B6B412ACED030C89DCF1627E /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C2F18249240776C5A3459 /* ViewModelType.swift */; };
 		BA8EFC6DA8B273AA700C53A4 /* SwiftUIExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F86E510A7B61F1375A13413 /* SwiftUIExampleApp.swift */; };
 		D8E9CD1F220A588644794ED7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11402FEE37F59FB0E0ECEEC1 /* HomeView.swift */; };
+		DC5CD5B2151174C64F08FFE8 /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF098A1843772353373E3AEE /* MovieDetailView.swift */; };
 		E1FFC231DCB2D248C5DB7D83 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F2EC38C8F212082DEDC39 /* ContentView.swift */; };
 		E596D9BE85063139B5D39571 /* AsyncSwiftyNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = DA8C4417E710E5CF667200A8 /* AsyncSwiftyNetworking */; };
-		F3008376FA99C6ED63EE2D1A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5365FE93E8A1DBCE502B4ECB /* Models.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		11402FEE37F59FB0E0ECEEC1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		1F86E510A7B61F1375A13413 /* SwiftUIExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIExampleApp.swift; sourceTree = "<group>"; };
+		25FE325016EE2E6F2CA4D7D4 /* TMDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBModels.swift; sourceTree = "<group>"; };
 		326C2F18249240776C5A3459 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		32724202B83012E72B75B98E /* ServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceType.swift; sourceTree = "<group>"; };
 		4455DEF06E02307B6AE23890 /* DI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
-		5365FE93E8A1DBCE502B4ECB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		5C80C1229D7DF08362E7D96D /* AsyncSwiftyNetworking */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AsyncSwiftyNetworking; path = ../..; sourceTree = SOURCE_ROOT; };
+		62244EF0BE6DD9C2A27B071E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8B3F2EC38C8F212082DEDC39 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		BDB9A9B4CA4EA46E8630349C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		DDD7ED310F42D82B866DF4EC /* SwiftUIExample.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SwiftUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF098A1843772353373E3AEE /* MovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailView.swift; sourceTree = "<group>"; };
+		DDD7ED310F42D82B866DF4EC /* SwiftUIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +47,7 @@
 		14F4BEBC825C178F19D84F2E /* SwiftUIExample */ = {
 			isa = PBXGroup;
 			children = (
+				62244EF0BE6DD9C2A27B071E /* Info.plist */,
 				6F4FFA2A64EF7DCE5DD4B45A /* App */,
 				BB4008DF8205ACAB4616EA15 /* Models */,
 				FA2DE673AEF407976B6987AD /* Networking */,
@@ -59,7 +61,7 @@
 			children = (
 				8B3F2EC38C8F212082DEDC39 /* ContentView.swift */,
 				11402FEE37F59FB0E0ECEEC1 /* HomeView.swift */,
-				BDB9A9B4CA4EA46E8630349C /* LoginView.swift */,
+				AF098A1843772353373E3AEE /* MovieDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -100,7 +102,7 @@
 		BB4008DF8205ACAB4616EA15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5365FE93E8A1DBCE502B4ECB /* Models.swift */,
+				25FE325016EE2E6F2CA4D7D4 /* TMDBModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -145,6 +147,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					B246CF60B1838184DB3DB021 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 7BD9D13120D140C8BD7821A1 /* Build configuration list for PBXProject "SwiftUIExample" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -159,7 +166,6 @@
 			packageReferences = (
 				C6F32AA42804E94FDE90359F /* XCLocalSwiftPackageReference "../.." */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -176,10 +182,10 @@
 				E1FFC231DCB2D248C5DB7D83 /* ContentView.swift in Sources */,
 				1AF368976451672557C8851D /* DI.swift in Sources */,
 				D8E9CD1F220A588644794ED7 /* HomeView.swift in Sources */,
-				6A93B47BA65A6BEB64088349 /* LoginView.swift in Sources */,
-				F3008376FA99C6ED63EE2D1A /* Models.swift in Sources */,
+				DC5CD5B2151174C64F08FFE8 /* MovieDetailView.swift in Sources */,
 				B384A5F412AB561FF7C2884D /* ServiceType.swift in Sources */,
 				BA8EFC6DA8B273AA700C53A4 /* SwiftUIExampleApp.swift in Sources */,
+				46F4625EA6428B34517896BC /* TMDBModels.swift in Sources */,
 				B6B412ACED030C89DCF1627E /* ViewModelType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,10 +197,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwiftUIExample/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "SwiftUI Example";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -212,10 +219,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6VC84T9283;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwiftUIExample/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "SwiftUI Example";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -114,6 +114,30 @@ public extension URLSessionNetworkClient {
         )
     }
     
+    /// Creates a custom client with user-provided interceptors
+    /// - Parameters:
+    ///   - baseURL: The base URL for all requests
+    ///   - requestInterceptors: Custom request interceptors
+    ///   - responseInterceptors: Custom response interceptors
+    ///   - configuration: Network configuration (default: .default)
+    /// - Returns: A configured URLSessionNetworkClient
+    static func custom(
+        baseURL: String,
+        requestInterceptors: [RequestInterceptor],
+        responseInterceptors: [ResponseInterceptor] = [],
+        configuration: NetworkConfiguration = .default
+    ) -> URLSessionNetworkClient {
+        return URLSessionNetworkClient(
+            configuration: configuration,
+            requestInterceptors: requestInterceptors,
+            responseInterceptors: responseInterceptors,
+            baseURL: baseURL,
+            hasLoggingInterceptor: false,
+            hasAuthInterceptor: false,
+            hasRefreshInterceptor: false
+        )
+    }
+    
     // MARK: - Convenience Request Methods
     
     /// Performs a request using the configured base URL

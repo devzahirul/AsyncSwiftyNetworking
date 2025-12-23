@@ -5,14 +5,14 @@ struct HomeView: View {
     
     var body: some View {
         TabView {
-            UserProfileView()
+            MoviesView()
                 .tabItem {
-                    Label("Profile", systemImage: "person.circle")
+                    Label("Movies", systemImage: "film")
                 }
             
-            PostsView()
+            FavoritesView()
                 .tabItem {
-                    Label("Posts", systemImage: "list.bullet")
+                    Label("Favorites", systemImage: "heart.fill")
                 }
             
             SettingsView()
@@ -23,66 +23,107 @@ struct HomeView: View {
     }
 }
 
-// MARK: - User Profile View
+// MARK: - Movies View
 
-struct UserProfileView: View {
-    @HiltViewModel(UserViewModel.self) var vm
+struct MoviesView: View {
+    @HiltViewModel(PopularMoviesViewModel.self) var vm
     
     var body: some View {
         NavigationStack {
-            NetworkDataView(vm) { (user: User) in
-                VStack(spacing: 20) {
-                    Image(systemName: "person.circle.fill")
-                        .font(.system(size: 100))
-                        .foregroundStyle(.blue.gradient)
-                    
-                    Text(user.name)
-                        .font(.title.bold())
-                    
-                    Text(user.email)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    
-                    Divider()
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("User ID: \(user.id)", systemImage: "number")
+            NetworkDataView(vm) { (response: PopularMoviesResponse) in
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        ForEach(response.results) { movie in
+                            NavigationLink(destination: MovieDetailView(movieId: movie.id)) {
+                                MovieCard(movie: movie)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(12)
-                    
-                    Spacer()
                 }
-                .padding()
             }
-            .navigationTitle("Profile")
+            .navigationTitle("Popular Movies")
         }
     }
 }
 
-// MARK: - Posts View
+// MARK: - Movie Card
 
-struct PostsView: View {
-    @HiltViewModel(PostListViewModel.self) var vm
+struct MovieCard: View {
+    let movie: Movie
     
     var body: some View {
-        NavigationStack {
-            NetworkListDataView(vm) { (post: Post) in
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(post.title)
-                        .font(.headline)
-                        .lineLimit(2)
-                    
-                    Text(post.body)
+        HStack(alignment: .top, spacing: 12) {
+            // Poster
+            AsyncImage(url: movie.posterURL) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .overlay {
+                        Image(systemName: "film")
+                            .foregroundColor(.gray)
+                    }
+            }
+            .frame(width: 100, height: 150)
+            .cornerRadius(8)
+            
+            // Info
+            VStack(alignment: .leading, spacing: 8) {
+                Text(movie.title)
+                    .font(.headline)
+                    .lineLimit(2)
+                
+                HStack {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.yellow)
+                    Text(String(format: "%.1f", movie.voteAverage))
+                        .font(.subheadline.bold())
+                }
+                
+                if let date = movie.releaseDate {
+                    Text(date)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                        .lineLimit(3)
                 }
-                .padding(.vertical, 4)
+                
+                Text(movie.overview)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(3)
+                
+                Spacer()
             }
-            .navigationTitle("Posts")
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+}
+
+// MARK: - Favorites View
+
+struct FavoritesView: View {
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Image(systemName: "heart.fill")
+                    .font(.system(size: 60))
+                    .foregroundStyle(.red.gradient)
+                
+                Text("Favorites")
+                    .font(.title.bold())
+                
+                Text("Your favorite movies will appear here")
+                    .foregroundColor(.secondary)
+            }
+            .navigationTitle("Favorites")
         }
     }
 }
@@ -100,11 +141,15 @@ struct SettingsView: View {
                         Button("Logout", role: .destructive) {
                             AuthState.shared.logout()
                         }
+                    } else {
+                        Text("Not logged in")
+                            .foregroundColor(.secondary)
                     }
                 }
                 
                 Section("About") {
                     LabeledContent("Version", value: "1.0.0")
+                    LabeledContent("API", value: "TMDB v3")
                     LabeledContent("Library", value: "AsyncSwiftyNetworking")
                 }
             }
