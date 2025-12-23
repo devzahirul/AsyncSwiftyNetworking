@@ -294,21 +294,60 @@ LoginViewModel → AuthState.onLoginSuccess() → Views update
 
 ---
 
-## 🔐 Authentication with Token Refresh
+## 🔐 Authenticated API Calls
+
+When you register the client with `withAuth()`, **all services automatically get the token header**:
 
 ### DI.swift
 
 ```swift
-di.register(URLSessionNetworkClient.self) {
-    URLSessionNetworkClient.withAuth(
-        baseURL: di.baseURL,
-        tokenStorage: storage,
-        refreshHandler: MyRefreshHandler()
-    )
+DI.configure { di in
+    let storage = KeychainTokenStorage()
+    di.registerSingleton(TokenStorage.self, instance: storage)
+    
+    // All requests auto-include: Authorization: Bearer <token>
+    di.register(URLSessionNetworkClient.self) {
+        URLSessionNetworkClient.withAuth(
+            baseURL: di.baseURL,
+            tokenStorage: storage,
+            refreshHandler: MyRefreshHandler()
+        )
+    }
+    
+    // These services use the auth-enabled client
+    di.register(ProfileService.self) { ProfileService(.get("/profile")) }
+    di.register(OrderListService.self) { OrderListService(.get("/orders")) }
 }
 ```
 
-### RefreshHandler.swift
+### How It Works
+
+```
+GenericNetworkService<Profile> → Resolves URLSessionNetworkClient from DI
+                                            ↓
+                               AuthInterceptor adds header:
+                               "Authorization: Bearer <token>"
+                                            ↓
+                               Request sent with token!
+```
+
+---
+
+## 🔗 Interceptors
+
+### AuthInterceptor (Built-in)
+
+Automatically adds Bearer token from TokenStorage:
+
+```swift
+// Request:
+GET /profile
+Authorization: Bearer eyJhbGciOi...
+```
+
+### RefreshTokenInterceptor (Built-in)
+
+Handles 401 responses:
 
 ```swift
 class MyRefreshHandler: TokenRefreshHandler {
@@ -318,12 +357,21 @@ class MyRefreshHandler: TokenRefreshHandler {
     }
     
     func onRefreshFailure(_ error: Error) async {
-        // Navigate to login
+        AuthState.shared.onSessionExpired()  // Navigate to login
     }
 }
 ```
 
----
+### Custom Interceptor
+
+```swift
+class LoggingInterceptor: RequestInterceptor {
+    func intercept(_ request: URLRequest) async throws -> URLRequest {
+        print("➡️ \(request.httpMethod ?? "") \(request.url?.path ?? "")")
+        return request
+    }
+}
+```
 
 ## 🛠️ Request Builder
 
