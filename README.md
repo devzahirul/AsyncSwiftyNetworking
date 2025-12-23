@@ -32,7 +32,7 @@ dependencies: [
 
 ## 🚀 Quick Start (3 Steps!)
 
-### Step 1: Define Model
+### Step 1: Define Model + Typealias
 
 ```swift
 struct Profile: Codable, HTTPResponseDecodable {
@@ -41,6 +41,10 @@ struct Profile: Codable, HTTPResponseDecodable {
     let name: String
     let email: String
 }
+
+// Typealias for cleaner code
+typealias ProfileService = GenericNetworkService<Profile>
+typealias ProfileViewModel = GenericNetworkViewModel<Profile>
 ```
 
 ### Step 2: Register in DI
@@ -58,12 +62,11 @@ struct MyApp: App {
             }
             
             // 2. Register Service (ViewModel auto-resolves it!)
-            di.register(GenericNetworkService<Profile>.self) {
-                GenericNetworkService(.get("/profile"))
+            di.register(ProfileService.self) {
+                ProfileService(.get("/profile"))
             }
             
             // ⚠️ NO need to register ViewModel!
-            // @HiltViewModel handles ViewModel creation automatically
         }
     }
 }
@@ -73,7 +76,7 @@ struct MyApp: App {
 
 ```swift
 struct ProfileView: View {
-    @HiltViewModel(GenericNetworkViewModel<Profile>.self) var vm
+    @HiltViewModel(ProfileViewModel.self) var vm  // Clean!
     
     var body: some View {
         NetworkDataView(vm) { profile in
