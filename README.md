@@ -411,6 +411,44 @@ Request: authInterceptor → apiKeyInterceptor → loggingInterceptor → Networ
 Response: Network → loggingInterceptor → App
 ```
 
+### Default Headers Interceptor
+
+Add default headers to all requests:
+
+```swift
+class DefaultHeadersInterceptor: RequestInterceptor {
+    private let headers: [String: String]
+    
+    init(headers: [String: String]) {
+        self.headers = headers
+    }
+    
+    func intercept(_ request: URLRequest) async throws -> URLRequest {
+        var req = request
+        for (key, value) in headers {
+            req.setValue(value, forHTTPHeaderField: key)
+        }
+        return req
+    }
+}
+
+// Usage in DI
+di.register(URLSessionNetworkClient.self) {
+    let defaultHeaders = DefaultHeadersInterceptor(headers: [
+        "X-API-Key": "your-api-key",
+        "Accept-Language": "en",
+        "User-Agent": "MyApp/1.0"
+    ])
+    let authInterceptor = AuthInterceptor(storage: storage)
+    
+    return URLSessionNetworkClient(
+        configuration: .default,
+        requestInterceptors: [defaultHeaders, authInterceptor],
+        responseInterceptors: []
+    )
+}
+```
+
 ## 🛠️ Request Builder
 
 ```swift
