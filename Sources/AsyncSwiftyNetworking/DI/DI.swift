@@ -150,6 +150,14 @@ public final class DI: @unchecked Sendable {
         viewModels.removeValue(forKey: key)
     }
     
+    /// Clear ViewModels matching a prefix (useful for navigation cleanup)
+    /// - Parameter prefix: Only ViewModels with keys starting with this prefix will be removed
+    public func clearViewModels(withPrefix prefix: String) {
+        lock.lock()
+        defer { lock.unlock() }
+        viewModels = viewModels.filter { !$0.key.hasPrefix(prefix) }
+    }
+    
     // MARK: - Reset (for testing)
     
     /// Reset all registrations and caches

@@ -26,6 +26,9 @@ public protocol Endpoint {
     
     /// The body for the request.
     var body: Data? { get }
+    
+    /// Optional timeout override for this specific endpoint
+    var timeoutInterval: TimeInterval? { get }
 }
 
 /// Default extensions for commonly used functionality
@@ -43,5 +46,36 @@ public extension Endpoint {
     
     var body: Data? {
         return nil
+    }
+    
+    var timeoutInterval: TimeInterval? {
+        return nil
+    }
+    
+    // MARK: - Logging Configuration
+    
+    /// Whether this endpoint should be logged. Default is true.
+    /// Set to false for sensitive endpoints (login, payment, etc.)
+    var loggingEnabled: Bool {
+        return true
+    }
+    
+    /// The log level for this endpoint. Default is .verbose.
+    /// Only applies if loggingEnabled is true.
+    var logLevel: LogLevel {
+        return .verbose
+    }
+}
+
+// MARK: - LogLevel
+
+/// Log level options for controlling per-endpoint verbosity.
+public enum LogLevel: Int, Sendable, Comparable {
+    case none = 0
+    case basic = 1
+    case verbose = 2
+    
+    public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
+        lhs.rawValue < rhs.rawValue
     }
 }

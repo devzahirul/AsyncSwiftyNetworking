@@ -17,7 +17,12 @@ public struct Inject<T> {
             if resolved == nil {
                 resolved = DI.shared.resolve(type)
             }
-            return resolved!
+            // resolve() uses fatalError for missing registrations,
+            // so resolved is guaranteed non-nil at this point
+            guard let value = resolved else {
+                fatalError("[\(T.self)] DI resolution returned nil unexpectedly")
+            }
+            return value
         }
     }
 }

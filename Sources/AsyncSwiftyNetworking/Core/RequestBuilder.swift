@@ -214,4 +214,35 @@ public struct RequestBuilder: Endpoint, Sendable {
             encoder: encoder
         )
     }
+    
+    // MARK: - Convenience Methods
+    
+    /// Creates a builder with authorization header
+    /// - Parameters:
+    ///   - token: The access token
+    ///   - scheme: The auth scheme (default: Bearer)
+    /// - Returns: A new builder with the header added
+    public func authorize(_ token: String, scheme: String = "Bearer") -> RequestBuilder {
+        header("Authorization", "\(scheme) \(token)")
+    }
+    
+    /// Sets Content-Type to application/x-www-form-urlencoded
+    /// - Returns: A new builder with appropriate header
+    public func formURLEncoded() -> RequestBuilder {
+        header("Content-Type", "application/x-www-form-urlencoded")
+    }
+    
+    /// Adds If-None-Match header for conditional requests
+    /// - Parameter etag: The ETag to check against
+    /// - Returns: A new builder with the header added
+    public func ifNoneMatch(_ etag: String) -> RequestBuilder {
+        header("If-None-Match", etag)
+    }
+    
+    /// Sets Accept-Language header
+    /// - Parameter language: The language string (e.g., "en-US")
+    /// - Returns: A new builder with the header added
+    public func acceptLanguage(_ language: String) -> RequestBuilder {
+        header("Accept-Language", language)
+    }
 }

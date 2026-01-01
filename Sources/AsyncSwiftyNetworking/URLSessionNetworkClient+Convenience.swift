@@ -138,8 +138,6 @@ public extension URLSessionNetworkClient {
         )
     }
     
-    // MARK: - Convenience Request Methods
-    
     /// Performs a request using the configured base URL
     /// - Parameter endpoint: The endpoint to request
     /// - Returns: The decoded response
@@ -148,6 +146,53 @@ public extension URLSessionNetworkClient {
             throw NetworkError.invalidURL
         }
         return try await request(endpoint, baseUrl: baseURL)
+    }
+    
+    /// Performs a request and returns a Result (non-throwing alternative)
+    /// - Parameter endpoint: The endpoint to request
+    /// - Returns: Result containing either the decoded response or a NetworkError
+    func requestResult<T: HTTPResponseDecodable>(_ endpoint: Endpoint) async -> Result<T, NetworkError> {
+        do {
+            let response: T = try await request(endpoint)
+            return .success(response)
+        } catch let error as NetworkError {
+            return .failure(error)
+        } catch {
+            return .failure(.underlying(error.localizedDescription))
+        }
+    }
+    
+    /// Performs a paginated request using the configured base URL
+    /// - Parameters:
+    ///   - endpoint: The endpoint to request
+    ///   - pagination: The pagination parameters
+    /// - Returns: A paginated response containing the decoded items
+    func requestPaginated<T: Decodable>(_ endpoint: Endpoint, pagination: PaginationParams) async throws -> PaginatedResponse<T> {
+        guard let baseURL = _baseURL else {
+            throw NetworkError.invalidURL
+        }
+        return try await requestPaginated(endpoint, baseUrl: baseURL, pagination: pagination)
+    }
+    
+    /// Performs an upload using the configured base URL
+    /// - Parameters:
+    ///   - endpoint: The endpoint to upload to
+    ///   - formData: The multipart form data
+    /// - Returns: The decoded response
+    func upload<T: HTTPResponseDecodable>(_ endpoint: Endpoint, formData: MultipartFormData) async throws -> T {
+        guard let baseURL = _baseURL else {
+            throw NetworkError.invalidURL
+        }
+        return try await upload(endpoint, baseUrl: baseURL, formData: formData)
+    }
+    
+    /// Performs a request expecting no response body (for 204 No Content, etc.)
+    /// - Parameter endpoint: The endpoint to request
+    func requestVoid(_ endpoint: Endpoint) async throws {
+        guard let baseURL = _baseURL else {
+            throw NetworkError.invalidURL
+        }
+        let _: VoidResponse = try await request(endpoint, baseUrl: baseURL)
     }
     
     /// Performs a request and returns raw Data (no decoding)
@@ -159,15 +204,6 @@ public extension URLSessionNetworkClient {
         }
         let response: RawDataResponse = try await request(endpoint, baseUrl: baseURL)
         return response.data
-    }
-    
-    /// Performs a request expecting no response body (for 204 No Content, etc.)
-    /// - Parameter endpoint: The endpoint to request
-    func requestVoid(_ endpoint: Endpoint) async throws {
-        guard let baseURL = _baseURL else {
-            throw NetworkError.invalidURL
-        }
-        let _: VoidResponse = try await request(endpoint, baseUrl: baseURL)
     }
 }
 

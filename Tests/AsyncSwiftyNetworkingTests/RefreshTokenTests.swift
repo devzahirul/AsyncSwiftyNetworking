@@ -157,4 +157,69 @@ struct RefreshTokenInterceptorTests {
         #expect(storage.currentToken == nil)
         #expect(storage.refreshToken == nil)
     }
+    
+    // MARK: - Integration Test: Full Retry Flow
+    
+    @Test("NetworkClient retries request after successful token refresh")
+    func testNetworkClientRetriesAfterTokenRefresh() async throws {
+        // Setup mock session that returns 401 first, then 200
+        let mockSession = MockURLSession()
+        var requestCount = 0
+        
+        mockSession.requestHandler = { request in
+            requestCount += 1
+            
+            if requestCount == 1 {
+                // First request: return 401 to trigger refresh
+                let response = HTTPURLResponse(
+                    url: request.url!,
+                    statusCode: 401,
+                    httpVersion: "HTTP/1.1",
+                    headerFields: nil
+                )!
+                return ("{}".data(using: .utf8)!, response)
+            } else {
+                // Retry request: return success
+                let response = HTTPURLResponse(
+                    url: request.url!,
+                    statusCode: 200,
+                    httpVersion: "HTTP/1.1",
+                    headerFields: nil
+                )!
+                return ("{\"id\": 1, \"name\": \"Test User\"}".data(using: .utf8)!, response)
+            }
+        }
+        
+        // Setup token storage and refresh handler
+        let storage = MockTokenStorage()
+        storage.mockToken = "old-expired-token"
+        
+        let refreshHandler = MockRefreshHandler()
+        refreshHandler.mockNewToken = "new-fresh-token"
+        
+        let refreshInterceptor = RefreshTokenInterceptor(
+            tokenStorage: storage,
+            refreshHandler: refreshHandler
+        )
+        
+        // Create client with refresh interceptor
+        let client = URLSessionNetworkClient(
+            session: mockSession,
+            requestInterceptors: [refreshInterceptor],
+            responseInterceptors: [refreshInterceptor]
+        )
+        
+        // Make request - should trigger retry after refresh
+        let result: TestUserResponse = try await client.request(
+            TestEndpoint.getUser(id: 1),
+            baseUrl: "https://api.test.com"
+        )
+        
+        // Verify the full flow worked
+        #expect(result.id == 1)
+        #expect(result.name == "Test User")
+        #expect(requestCount == 2, "Should have made 2 requests (original + retry)")
+        #expect(refreshHandler.refreshCallCount == 1, "Token should have been refreshed once")
+        #expect(storage.currentToken == "new-fresh-token", "New token should be saved")
+    }
 }

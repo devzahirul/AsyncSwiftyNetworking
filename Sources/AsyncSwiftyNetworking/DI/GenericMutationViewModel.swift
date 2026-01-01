@@ -73,7 +73,10 @@ open class GenericMutationViewModel<Request: Encodable, Response: HTTPResponseDe
         if service == nil {
             service = DI.shared.resolve(GenericMutationService<Request, Response>.self)
         }
-        return service!
+        guard let resolvedService = service else {
+            fatalError("[GenericMutationService<\(Request.self), \(Response.self)>] resolution failed")
+        }
+        return resolvedService
     }
 }
 

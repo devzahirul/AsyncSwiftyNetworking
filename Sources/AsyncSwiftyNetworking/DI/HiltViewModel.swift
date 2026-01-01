@@ -49,6 +49,8 @@ public struct HiltViewModel<VM: ObservableObject>: DynamicProperty {
 // MARK: - Protocol for default initialization
 
 /// Protocol for ViewModels that can be created with no arguments
+/// Marked @MainActor for ViewModels since they typically run on main thread
+@MainActor
 public protocol DefaultInitializable {
     init()
 }

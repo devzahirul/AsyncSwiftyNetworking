@@ -93,12 +93,11 @@ public final class RefreshTokenInterceptor: RequestInterceptor, ResponseIntercep
         // Note: This is tracked via the coordinator's pending request mechanism
         
         // Attempt to refresh the token
+        // Capture refreshHandler directly to avoid potential issues with class lifecycle
+        let handler = refreshHandler
         do {
-            let newToken = try await coordinator.refreshIfNeeded { [weak self] in
-                guard let self = self else {
-                    throw NetworkError.unknown
-                }
-                return try await self.refreshHandler.refreshToken()
+            let newToken = try await coordinator.refreshIfNeeded {
+                return try await handler.refreshToken()
             }
             
             // Save the new token
@@ -140,10 +139,17 @@ private actor RefreshCoordinator {
         // Start a new refresh
         isRefreshing = true
         
-        let task = Task { [weak self] in
-            let result = try await refresh()
-            await self?.completeRefresh()
-            return result
+        // Note: No [weak self] needed - actors manage their own lifecycle
+        // and Tasks within actors are automatically cancelled when the actor deinitializes
+        let task = Task {
+            do {
+                let result = try await refresh()
+                await self.completeRefresh()
+                return result
+            } catch {
+                await self.completeRefresh()
+                throw error
+            }
         }
         
         refreshTask = task

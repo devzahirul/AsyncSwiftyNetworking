@@ -105,6 +105,52 @@ final class ConvenienceFactoryTests: XCTestCase {
         XCTAssertNotNil(client)
         // Mobile preset should have retry policy and longer timeout
     }
+    
+    // MARK: - Result-Based API Tests
+    
+    func testRequestResultReturnsSuccess() async throws {
+        // Given
+        let mockSession = MockURLSession()
+        mockSession.mockSuccess(TestUserResponse(id: 1, name: "Test", email: "test@test.com", statusCode: nil))
+        
+        let client = URLSessionNetworkClient.quick(
+            baseURL: "https://api.example.com",
+            session: mockSession
+        )
+        
+        // When
+        let result: Result<TestUserResponse, NetworkError> = await client.requestResult(TestEndpoint.getUser(id: 1))
+        
+        // Then
+        switch result {
+        case .success(let user):
+            XCTAssertEqual(user.id, 1)
+        case .failure(let error):
+            XCTFail("Expected success but got \(error)")
+        }
+    }
+    
+    func testRequestResultReturnsFailure() async throws {
+        // Given
+        let mockSession = MockURLSession()
+        mockSession.mockError(statusCode: 404)
+        
+        let client = URLSessionNetworkClient.quick(
+            baseURL: "https://api.example.com",
+            session: mockSession
+        )
+        
+        // When
+        let result: Result<TestUserResponse, NetworkError> = await client.requestResult(TestEndpoint.getUser(id: 999))
+        
+        // Then
+        switch result {
+        case .success:
+            XCTFail("Expected failure but got success")
+        case .failure(let error):
+            XCTAssertEqual(error, .notFound)
+        }
+    }
 }
 
 // Note: MockTokenStorage and MockTokenRefreshHandler are defined in Mocks/Mocks.swift

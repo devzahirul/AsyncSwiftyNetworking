@@ -65,6 +65,16 @@ public protocol NetworkClient: Sendable {
     ///   - formData: The multipart form data containing files and fields.
     /// - Returns: The decoded response.
     func upload<T: HTTPResponseDecodable>(_ endpoint: Endpoint, baseUrl: String, formData: MultipartFormData) async throws -> T
+
+    /// Performs a network request and returns metadata including duration and headers.
+    /// - Parameters:
+    ///   - endpoint: The endpoint to request.
+    ///   - baseUrl: The base URL for the API.
+    /// - Returns: The decoded response wrapped in NetworkResult.
+    func requestWithMetadata<T: HTTPResponseDecodable>(
+        _ endpoint: Endpoint,
+        baseUrl: String
+    ) async throws -> NetworkResult<T>
 }
 
 // MARK: - URLSession Network Client
@@ -179,6 +189,17 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
     
     public func request<T: HTTPResponseDecodable>(_ endpoint: Endpoint, baseUrl: String) async throws -> T {
         let request = try buildRequest(for: endpoint, baseUrl: baseUrl)
+        let result: NetworkResult<T> = try await performWithRetry(request)
+        return result.data
+    }
+
+    /// Performs a request and returns data with metadata
+    /// - Parameters:
+    ///   - endpoint: The endpoint to request.
+    ///   - baseUrl: The base URL for the API.
+    /// - Returns: The decoded response wrapped in NetworkResult.
+    public func requestWithMetadata<T: HTTPResponseDecodable>(_ endpoint: Endpoint, baseUrl: String) async throws -> NetworkResult<T> {
+        let request = try buildRequest(for: endpoint, baseUrl: baseUrl)
         return try await performWithRetry(request)
     }
     
@@ -202,7 +223,8 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         }
         
         request.url = paginatedURL
-        return try await performWithRetry(request)
+        let result: NetworkResult<PaginatedResponse<T>> = try await performWithRetry(request)
+        return result.data
     }
     
     // MARK: - Upload
@@ -212,7 +234,7 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         request.httpBody = formData.finalize()
         request.setValue(formData.contentType, forHTTPHeaderField: "Content-Type")
         
-        return try await performWithRetry(request)
+        return (try await performWithRetry(request)).data
     }
     
     // MARK: - Private Helpers
@@ -231,17 +253,31 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = endpoint.body
-        request.timeoutInterval = configuration.timeoutInterval
+        request.timeoutInterval = endpoint.timeoutInterval ?? configuration.timeoutInterval
         request.cachePolicy = configuration.cachePolicy
         
         endpoint.headers?.forEach { key, value in
             request.setValue(value, forHTTPHeaderField: key)
         }
         
+        // Add per-request logging configuration
+        if !endpoint.loggingEnabled {
+            request.setValue("false", forHTTPHeaderField: LoggingInterceptor.loggingEnabledHeader)
+        } else {
+            // Map LogLevel to header value
+            let logLevelValue: String
+            switch endpoint.logLevel {
+            case .none: logLevelValue = "none"
+            case .basic: logLevelValue = "basic"
+            case .verbose: logLevelValue = "verbose"
+            }
+            request.setValue(logLevelValue, forHTTPHeaderField: LoggingInterceptor.logLevelHeader)
+        }
+        
         return request
     }
     
-    private func performWithRetry<T: HTTPResponseDecodable>(_ request: URLRequest) async throws -> T {
+    private func performWithRetry<T: HTTPResponseDecodable>(_ request: URLRequest) async throws -> NetworkResult<T> {
         if configuration.retryPolicy == .none {
             return try await perform(request)
         }
@@ -251,7 +287,12 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         }
     }
     
-    private func perform<T: HTTPResponseDecodable>(_ request: URLRequest) async throws -> T {
+    /// Maximum number of retry attempts for token refresh
+    private static let maxTokenRefreshRetries = 1
+    
+    private func perform<T: HTTPResponseDecodable>(_ request: URLRequest, tokenRefreshRetryCount: Int = 0) async throws -> NetworkResult<T> {
+        let startTime = Date()
+        
         // Apply request interceptors
         var interceptedRequest = request
         for interceptor in requestInterceptors {
@@ -264,6 +305,8 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         
         do {
             (data, response) = try await session.data(for: interceptedRequest)
+        } catch is CancellationError {
+            throw CancellationError()
         } catch let urlError as URLError {
             throw NetworkError.from(urlError)
         } catch {
@@ -277,7 +320,17 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         // Apply response interceptors
         var interceptedData = data
         for interceptor in responseInterceptors {
-            interceptedData = try await interceptor.intercept(httpResponse, data: interceptedData)
+            do {
+                interceptedData = try await interceptor.intercept(httpResponse, data: interceptedData)
+            } catch RefreshTokenError.tokenRefreshed {
+                // Token was successfully refreshed - retry the original request
+                // Use a retry guard to prevent infinite loops
+                guard tokenRefreshRetryCount < Self.maxTokenRefreshRetries else {
+                    throw NetworkError.unauthorized
+                }
+                // Retry with the original request (interceptors will add new token)
+                return try await perform(request, tokenRefreshRetryCount: tokenRefreshRetryCount + 1)
+            }
         }
         
         // Handle specific status codes
@@ -307,9 +360,24 @@ public final class URLSessionNetworkClient: NetworkClient, @unchecked Sendable {
         
         // Decode response
         do {
-            var decodedResponse = try decoder.decode(T.self, from: interceptedData)
-            decodedResponse.statusCode = httpResponse.statusCode
-            return decodedResponse
+            var decodedResponse: T
+            
+            if T.self == RawDataResponse.self {
+                decodedResponse = RawDataResponse(data: interceptedData, statusCode: httpResponse.statusCode) as! T
+            } else {
+                decodedResponse = try decoder.decode(T.self, from: interceptedData)
+                decodedResponse.statusCode = httpResponse.statusCode
+            }
+            
+            let duration = Date().timeIntervalSince(startTime)
+            
+            return NetworkResult(
+                data: decodedResponse,
+                statusCode: httpResponse.statusCode,
+                headers: httpResponse.allHeaderFields as? [String: String] ?? [:],
+                url: httpResponse.url,
+                duration: duration
+            )
         } catch {
             throw NetworkError.decodingError(error.localizedDescription)
         }
